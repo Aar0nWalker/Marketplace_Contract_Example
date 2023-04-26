@@ -21,3 +21,4 @@ Contract can contain NFT while listed and transfer funds after selling. I've use
 - Add NFT creating feature 
 - Add NFT trading feature
 - Add web2 UI
+- Add auction
