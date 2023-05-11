@@ -4,15 +4,17 @@ pragma solidity 0.8.19;
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "./AuctionFactory.sol";
 
 contract Marketplace is Ownable, ReentrancyGuard {
     uint256 public marketPlaceFee;
-
-    address payable public authority;
-    address public auctionContract;
     
-    constructor() {
+    address payable public authority;
+    address public auctionFactory;
+
+    constructor(address factory) {
         authority = payable(msg.sender);
+        auctionFactory = factory;
     }
 
     struct Item {
@@ -116,8 +118,15 @@ contract Marketplace is Ownable, ReentrancyGuard {
 
     function setting(uint256 _newFee, address _newAuc) external onlyOwner {
         marketPlaceFee = _newFee;
-        auctionContract = _newAuc;
+        auctionFactory = _newAuc;
     }
+
+    function createAuction() external nonReentrant {
+        AuctionFactory auc = AuctionFactory(auctionFactory);
+        auc.createAuction(marketPlaceFee);
+    }
+
+    
 
 }
 
